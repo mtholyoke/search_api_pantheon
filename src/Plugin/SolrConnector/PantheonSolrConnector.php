@@ -138,7 +138,7 @@ class PantheonSolrConnector extends StandardSolrConnector {
    */
   protected function connect() {
     if (!$this->solr) {
-      $this->solr = new Client();
+      $this->solr = $this->createClient($this->configuration);
 
       // The parent method is overridden so that this alternate adapter class
       // can be set. This line is the only difference from the parent method.
@@ -160,6 +160,7 @@ class PantheonSolrConnector extends StandardSolrConnector {
    * {@inheritdoc}
    */
   public function pingServer() {
+    $this->connect();
     $server = $this->solr->getEndpoint('server');
     $options = ['handler' => 'admin/system'];
     $ping = $this->pingEndpoint($server, $options);
